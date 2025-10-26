@@ -131,6 +131,14 @@ export default (strapi: Core.Strapi) => {
         );
       }
     }
+
+    // Register audit actions
+    await providers.action.register('read_audit_logs', {
+      api: 'core',
+      controller: 'audit',
+      action: 'find',
+      uid: 'read_audit_logs',
+    });
   };
 
   // Create an instance of a content-API permission engine

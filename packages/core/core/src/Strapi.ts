@@ -1,13 +1,13 @@
 import * as globalAgent from 'global-agent';
-import path from 'path';
-import _ from 'lodash';
+import * as path from 'path';
+import * as _ from 'lodash';
 import { isFunction } from 'lodash/fp';
 import { Logger, createLogger } from '@strapi/logger';
 import { Database } from '@strapi/database';
 
 import type { Core, Modules, UID, Schema } from '@strapi/types';
 
-import tsUtils from '@strapi/typescript-utils';
+import * as tsUtils from '@strapi/typescript-utils';
 import { loadConfiguration } from './configuration';
 
 import * as factories from './factories';
@@ -36,6 +36,7 @@ import { createContentSourceMapsService } from './services/content-source-maps';
 
 import { coreStoreModel } from './services/core-store';
 import { createConfigProvider } from './services/config';
+import createAuditService from './services/audit';
 
 // import { cleanComponentJoinTable } from './services/document-service/utils/clean-component-join-table';
 
@@ -237,6 +238,10 @@ class Strapi extends Container implements Core.Strapi {
     return this.get('validators');
   }
 
+  get audit() {
+    return this.get('audit');
+  }
+
   async start() {
     try {
       if (!this.isLoaded) {
@@ -295,7 +300,8 @@ class Strapi extends Container implements Core.Strapi {
         );
       })
       .add('reload', () => createReloader(this))
-      .add('content-source-maps', () => createContentSourceMapsService(this));
+      .add('content-source-maps', () => createContentSourceMapsService(this))
+      .add('audit', () => createAuditService({ strapi: this }));
   }
 
   sendStartupTelemetry() {

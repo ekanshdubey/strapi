@@ -68,6 +68,16 @@ const createCollectionTypeController = ({
 
       const sanitizedEntity = await this.sanitizeOutput(entity, ctx);
 
+      // Audit logging
+      const userId = ctx.state?.user?.id;
+      await strapi.audit.log({
+        contentType: uid,
+        recordId: sanitizedEntity.documentId || sanitizedEntity.id,
+        action: 'create',
+        userId,
+        data: sanitizedEntity,
+      });
+
       ctx.status = 201;
       return this.transformResponse(sanitizedEntity);
     },
@@ -97,6 +107,16 @@ const createCollectionTypeController = ({
 
       const sanitizedEntity = await this.sanitizeOutput(entity, ctx);
 
+      // Audit logging
+      const userId = ctx.state?.user?.id;
+      await strapi.audit.log({
+        contentType: uid,
+        recordId: sanitizedEntity.documentId || sanitizedEntity.id,
+        action: 'update',
+        userId,
+        data: sanitizedEntity, // Log the updated data
+      });
+
       return this.transformResponse(sanitizedEntity);
     },
 
@@ -108,7 +128,23 @@ const createCollectionTypeController = ({
       await this.validateQuery(ctx);
       const sanitizedQuery = await this.sanitizeQuery(ctx);
 
+      // Fetch entity for audit logging before deleting
+      const entityToDelete = await strapi.service(uid).findOne(id, sanitizedQuery);
+      const sanitizedEntity = entityToDelete ? await this.sanitizeOutput(entityToDelete, ctx) : null;
+
       await strapi.service(uid).delete(id, sanitizedQuery);
+
+      // Audit logging
+      if (sanitizedEntity) {
+        const userId = ctx.state?.user?.id;
+        await strapi.audit.log({
+          contentType: uid,
+          recordId: sanitizedEntity.documentId || sanitizedEntity.id,
+          action: 'delete',
+          userId,
+          data: sanitizedEntity, // Log the deleted data
+        });
+      }
 
       ctx.status = 204;
     },

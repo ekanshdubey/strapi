@@ -45,6 +45,10 @@ const createSingleTypeController = ({
 
       const sanitizedInputData = await this.sanitizeInput(body.data, ctx);
 
+      // Check if entity exists for audit logging
+      const existingEntity = await strapi.service(uid).find(query);
+      const isCreate = !existingEntity;
+
       const entity = await strapi.service(uid).createOrUpdate({
         ...query,
         data: sanitizedInputData,
@@ -52,13 +56,39 @@ const createSingleTypeController = ({
 
       const sanitizedEntity = await this.sanitizeOutput(entity, ctx);
 
+      // Audit logging
+      const userId = ctx.state?.user?.id;
+      await strapi.audit.log({
+        contentType: uid,
+        recordId: sanitizedEntity.documentId || sanitizedEntity.id,
+        action: isCreate ? 'create' : 'update',
+        userId,
+        data: sanitizedEntity,
+      });
+
       return this.transformResponse(sanitizedEntity);
     },
 
     async delete(ctx) {
       const { query } = ctx;
 
+      // Fetch entity for audit logging before deleting
+      const entityToDelete = await strapi.service(uid).find(query);
+      const sanitizedEntity = entityToDelete ? await this.sanitizeOutput(entityToDelete, ctx) : null;
+
       await strapi.service(uid).delete(query);
+
+      // Audit logging
+      if (sanitizedEntity) {
+        const userId = ctx.state?.user?.id;
+        await strapi.audit.log({
+          contentType: uid,
+          recordId: sanitizedEntity.documentId || sanitizedEntity.id,
+          action: 'delete',
+          userId,
+          data: sanitizedEntity, // Log the deleted data
+        });
+      }
 
       ctx.status = 204;
     },

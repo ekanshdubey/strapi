@@ -1,168 +1,211 @@
-<p align="center">
-  <a href="https://strapi.io/#gh-light-mode-only">
-    <img src="https://strapi.io/assets/strapi-logo-dark.svg" width="318px" alt="Strapi logo" />
-  </a>
-  <a href="https://strapi.io/#gh-dark-mode-only">
-    <img src="https://strapi.io/assets/strapi-logo-light.svg" width="318px" alt="Strapi logo" />
-  </a>
-</p>
+# Strapi Automated Audit Logging Feature
 
-<h3 align="center">Open-source headless CMS, self-hosted or Cloud you’re in control.</h3>
-<p align="center">The leading open-source headless CMS, 100% JavaScript/TypeScript, flexible and fully customizable.</p>
-<p align="center"><a href="https://cloud.strapi.io/signups?source=github1">Cloud</a> · <a href="https://strapi.io/demo?utm_campaign=Growth-Experiments&utm_source=strapi%2Fstrapi%20README.md">Try live demo</a></p>
-<br />
+## Overview
 
-<p align="center">
-  <a href="https://www.npmjs.org/package/@strapi/strapi">
-    <img src="https://img.shields.io/npm/v/@strapi/strapi/latest.svg" alt="NPM Version" />
-  </a>
-  <a href="https://github.com/strapi/strapi/actions/workflows/tests.yml">
-    <img src="https://github.com/strapi/strapi/actions/workflows/tests.yml/badge.svg?branch=main" alt="Tests" />
-  </a>
-  <a href="https://discord.strapi.io">
-    <img src="https://img.shields.io/discord/811989166782021633?label=Discord" alt="Strapi on Discord" />
-  </a>
-  <a href="https://github.com/strapi/strapi/actions/workflows/nightly.yml">
-    <img src="https://github.com/strapi/strapi/actions/workflows/nightly.yml/badge.svg" alt="Strapi Nightly Release Build Status" />
-  </a>
-</p>
-
-<br>
-
-<p align="center">
-  <a href="https://strapi.io">
-    <img src="https://raw.githubusercontent.com/strapi/strapi/main/public/assets/admin-demo.gif" alt="Administration panel" />
-  </a>
-</p>
-
-<br>
-
-Strapi Community Edition is a free and open-source headless CMS enabling you to manage any content, anywhere.
-
-- **Self-hosted or Cloud**: You can host and scale Strapi projects the way you want. You can save time by deploying to [Strapi Cloud](https://cloud.strapi.io/signups?source=github1) or deploy to the hosting platform you want\*\*: AWS, Azure, Google Cloud, DigitalOcean.
-- **Modern Admin Panel**: Elegant, entirely customizable and a fully extensible admin panel.
-- **Multi-database support**: You can choose the database you prefer: PostgreSQL, MySQL, MariaDB, and SQLite.
-- **Customizable**: You can quickly build your logic by fully customizing APIs, routes, or plugins to fit your needs perfectly.
-- **Blazing Fast and Robust**: Built on top of Node.js and TypeScript, Strapi delivers reliable and solid performance.
-- **Front-end Agnostic**: Use any front-end framework (React, Next.js, Vue, Angular, etc.), mobile apps or even IoT.
-- **Secure by default**: Reusable policies, CORS, CSP, P3P, Xframe, XSS, and more.
-- **Powerful CLI**: Scaffold projects and APIs on the fly.
-
-## Getting Started
-
-<a href="https://docs.strapi.io/developer-docs/latest/getting-started/quick-start.html" target="_blank">Read the Getting Started tutorial</a> or follow the steps below:
-
-### ⏳ Installation
-
-Install Strapi with this **Quickstart** command to create a Strapi project instantly:
-
-- (Use **yarn** to install the Strapi project (recommended). [Install yarn with these docs](https://yarnpkg.com/lang/en/docs/install/).)
-
-```bash
-yarn create strapi
-```
-
-**or**
-
-- (Using npx to install the Strapi project.)
-
-```bash
-npx create-strapi@latest
-```
-
-This command generates a brand new project with the default features (authentication, permissions, content management, content type builder & file upload).
-
-Enjoy 🎉
-
-### 🖐 Requirements
-
-Complete installation requirements can be found in the documentation under <a href="https://docs.strapi.io/developer-docs/latest/setup-deployment-guides/deployment.html">Installation Requirements</a>.
-
-**Supported operating systems**:
-
-| OS              | Recommended | Minimum    |
-| --------------- | ----------- | ---------- |
-| Ubuntu          | 24.04       | LTS        |
-| Debian          | 11          | LTS        |
-| RHEL            | 9           | LTS        |
-| macOS           | 14          | 12         |
-| Windows Desktop | 11          | 10         |
-| Windows Server  | No Support  | No Support |
-| Docker          | N/A         | N/A        |
-
-(Please note that Strapi may work on other operating systems, but these are not tested nor officially supported at this time.)
-
-**Node:**
-
-Strapi only supports maintenance and LTS versions of Node.js. Please refer to the <a href="https://nodejs.org/en/about/releases/">Node.js release schedule</a> for more information. NPM versions installed by default with Node.js are supported. Generally it's recommended to use yarn over npm where possible.
-
-| Strapi Version  | Recommended | Minimum |
-| --------------- | ----------- | ------- |
-| 5.0.0 and up    | 20.x        | 18.x    |
-| 4.14.5 and up   | 20.x        | 18.x    |
-| 4.11.0 and up   | 18.x        | 16.x    |
-| 4.3.9 to 4.10.x | 18.x        | 14.x    |
-| 4.0.x to 4.3.8  | 16.x        | 14.x    |
-
-**Database:**
-
-| Database   | Recommended | Minimum |
-| ---------- | ----------- | ------- |
-| MySQL      | 8.0         | 8.0     |
-| MariaDB    | 11.2        | 10.3    |
-| PostgreSQL | 16.0        | 14.0    |
-| SQLite     | 3           | 3       |
-
-**We recommend always using the latest version of Strapi stable to start your new projects**.
+This feature adds comprehensive automated audit logging to Strapi's Content API, tracking all content changes (create, update, delete operations) performed via the Content API. It provides a complete audit trail for content management activities.
 
 ## Features
 
-- **Content Types Builder**: Build the most flexible publishing experience for your content managers, by giving them the freedom to create any page on the go with [fields](https://docs.strapi.io/user-docs/content-manager/writing-content#filling-up-fields), components and [Dynamic Zones](https://docs.strapi.io/user-docs/content-manager/writing-content#dynamic-zones).
-- **Media Library**: Upload your images, videos, audio or documents to the media library. Easily find the right asset, edit and reuse it.
-- **Internationalization**: The Internationalization (i18n) plugin allows Strapi users to create, manage and distribute localized content in different languages, called "locales"
-- **Role Based Access Control**: Create an unlimited number of custom roles and permissions for admin and end users.
-- **GraphQL or REST**: Consume the API using REST or GraphQL
+- **Automatic Logging**: All Content API operations (create, update, delete) are automatically logged
+- **Rich Metadata**: Each log entry includes content type, record ID, action type, user, timestamp, and operation data
+- **RESTful Endpoint**: Query audit logs with filtering, pagination, and sorting capabilities
+- **Access Control**: Role-based permissions for accessing audit logs
+- **Configuration**: Configurable logging behavior (enable/disable, content type exclusions)
 
-You can unlock additional features such as SSO, Audit Logs, Review Workflows in [Strapi Cloud](https://cloud.strapi.io/login?source=github1) or [Strapi Enterprise](https://strapi.io/enterprise?source=github1).
+## Installation
 
-**[See more on our website](https://strapi.io/overview)**.
+This feature is integrated into Strapi core. No additional installation required.
 
-## Contributing
+## Configuration
 
-Please read our [Contributing Guide](./CONTRIBUTING.md) before submitting a Pull Request to the project.
+Add the following to your Strapi configuration file (`config/database.js` or environment-specific config):
 
-## Community support
+```javascript
+module.exports = {
+  // ... other config
+  auditLog: {
+    enabled: true,
+    excludeContentTypes: ['api::admin.admin', 'api::user.user']
+  }
+}
+```
 
-For general help using Strapi, please refer to [the official Strapi documentation](https://docs.strapi.io). For additional help, you can use one of these channels to ask a question:
+### Configuration Options
 
-- [Discord](https://discord.strapi.io) (For live discussion with the Community and Strapi team)
-- [GitHub](https://github.com/strapi/strapi) (Bug reports, Contributions)
-- [Community Forum](https://forum.strapi.io) (Questions and Discussions)
-- [Feedback section](https://feedback.strapi.io) (Roadmap, Feature requests)
-- [Twitter](https://twitter.com/strapijs) (Get the news fast)
-- [Facebook](https://www.facebook.com/Strapi-616063331867161)
-- [YouTube Channel](https://www.youtube.com/strapi) (Learn from Video Tutorials)
+- `auditLog.enabled` (boolean): Enable or disable audit logging globally (default: true)
+- `auditLog.excludeContentTypes` (array): Array of content type UIDs to exclude from logging
 
-## Migration
+## API Usage
 
-Follow our [migration guides](https://docs.strapi.io/developer-docs/latest/update-migration-guides/migration-guides.html) on the documentation to keep your projects up-to-date.
+### Query Audit Logs
 
-## Roadmap
+```
+GET /api/audit-logs
+```
 
-Check out our [roadmap](https://feedback.strapi.io) to get informed of the latest features released and the upcoming ones. You may also give us insights and vote for a specific feature.
+#### Query Parameters
 
-## Documentation
+- `contentType` (string): Filter by content type UID
+- `userId` (integer): Filter by user ID
+- `action` (string): Filter by action ('create', 'update', 'delete')
+- `startDate` (ISO date): Filter by start date
+- `endDate` (ISO date): Filter by end date
+- `pagination[page]` (integer): Page number (default: 1)
+- `pagination[pageSize]` (integer): Records per page (default: 25, max: 100)
+- `sort` (string): Sort field and direction (e.g., 'timestamp:desc')
 
-See our dedicated [repository](https://github.com/strapi/documentation) for the Strapi documentation, or view our documentation live:
+#### Authentication
 
-- [Developer docs](https://docs.strapi.io/developer-docs/latest/getting-started/introduction.html)
-- [User guide](https://docs.strapi.io/user-docs/latest/getting-started/introduction.html)
-- [Cloud guide](https://docs.strapi.io/cloud/intro)
+Requires authentication and the `read_audit_logs` permission.
 
-## Try live demo
+#### Response Example
 
-See for yourself what's under the hood by getting access to a [hosted Strapi project](https://strapi.io/demo) with sample data.
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "content_type": "api::article.article",
+      "record_id": "abc123",
+      "action": "create",
+      "timestamp": "2023-01-01T12:00:00Z",
+      "user_id": 5,
+      "data": {
+        "title": "New Article",
+        "content": "Article content...",
+        "createdAt": "2023-01-01T12:00:00Z"
+      }
+    }
+  ],
+  "meta": {
+    "pagination": {
+      "page": 1,
+      "pageSize": 25,
+      "pageCount": 1,
+      "total": 1
+    }
+  }
+}
+```
 
-## License
+## Permissions
 
-See the [LICENSE](./LICENSE) file for licensing information.
+The audit logs endpoint requires the `read_audit_logs` permission. By default, only super administrators have access to this permission. You can assign it to other roles through the Strapi admin panel under Settings > Users & Permissions > Roles.
+
+## Data Structure
+
+Each audit log entry contains:
+
+- `id`: Unique identifier (auto-generated)
+- `content_type`: UID of the content type (e.g., 'api::article.article')
+- `record_id`: Document ID of the affected record
+- `action`: Operation type ('create', 'update', 'delete')
+- `timestamp`: ISO timestamp of the operation
+- `user_id`: ID of the user who performed the operation (null for unauthenticated requests)
+- `data`: JSON object containing operation-specific data
+
+### Data Field Content
+
+- **Create operations**: Full payload of the newly created record
+- **Update operations**: Updated data of the modified record
+- **Delete operations**: Complete record data before deletion
+
+## Usage Examples
+
+### Get all audit logs for a specific content type
+```
+GET /api/audit-logs?contentType=api::article.article
+```
+
+### Get audit logs for a specific user
+```
+GET /api/audit-logs?userId=5
+```
+
+### Get create operations from the last week
+```
+GET /api/audit-logs?action=create&startDate=2023-01-01
+```
+
+### Paginated results with sorting
+```
+GET /api/audit-logs?pagination[page]=2&pagination[pageSize]=50&sort=timestamp:desc
+```
+
+## Database
+
+Audit logs are stored in the `audit_logs` table, which includes appropriate indexes for efficient querying:
+
+- Primary key on `id`
+- Composite index on `(content_type, timestamp, action)`
+- Single indexes on `user_id` and `record_id`
+
+## Security Considerations
+
+- Audit logs may contain sensitive data depending on your content types
+- Access to audit logs should be tightly controlled
+- Consider implementing retention policies for audit logs
+- Regular backup and archival strategies are recommended
+
+## Performance Notes
+
+- Audit logging adds minimal overhead to Content API operations
+- Logging failures won't block API operations
+- Consider the storage implications of long-term audit log retention
+- Database queries support efficient filtering and pagination
+
+## Architecture
+
+### Components
+
+1. **Audit Service**: Handles log creation and querying
+2. **Database Migration**: Creates the `audit_logs` table
+3. **Controller Hooks**: Integrated into Content API controllers for automatic logging
+4. **Audit Controller**: Handles the `/api/audit-logs` endpoint
+5. **Permission System**: Manages access to audit log viewing
+
+### Integration Points
+
+- Content API controllers automatically log operations
+- Permissions system controls endpoint access
+- Configuration system allows customization
+- Database layer stores log entries persistently
+
+## Troubleshooting
+
+### Logs Not Appearing
+
+1. Check that `auditLog.enabled` is set to `true` in configuration
+2. Verify the content type is not in `excludeContentTypes`
+3. Ensure database migrations have run successfully
+4. Check Strapi logs for audit service errors
+
+### Permission Denied
+
+1. Verify user authentication
+2. Check if user has `read_audit_logs` permission
+3. Ensure role is properly assigned in admin panel
+
+### Performance Issues
+
+1. Consider excluding high-traffic content types
+2. Implement audit log retention policies
+3. Monitor database performance and add indexes as needed
+
+## Migration and Deployment
+
+When deploying this feature:
+
+1. The database migration will automatically create the `audit_logs` table
+2. Configure the feature in your Strapi config files
+3. Assign appropriate permissions in the admin panel
+4. Test the functionality with your content types
+
+## Future Enhancements
+
+Potential future improvements include:
+- Admin panel UI for viewing audit logs
+- Configurable retention policies
+- Export functionality (CSV/JSON)
+- Webhook notifications for audit events
+- Advanced search and filtering options

@@ -210,6 +210,12 @@ describe('Content API - Permissions', () => {
           controller: 'controllerA',
           action: 'actionA',
         },
+        {
+          uid: 'read_audit_logs',
+          api: 'core',
+          controller: 'audit',
+          action: 'find',
+        },
       ]);
     });
 

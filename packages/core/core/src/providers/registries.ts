@@ -5,6 +5,7 @@ import * as registries from '../registries';
 import { loadApplicationContext } from '../loaders';
 import * as syncMigrations from '../migrations';
 import { discardDocumentDrafts } from '../migrations/database/5.0.0-discard-drafts';
+import { createAuditController } from '../core-api/controller/audit';
 
 export default defineProvider({
   init(strapi) {
@@ -36,5 +37,8 @@ export default defineProvider({
 
     // Database migrations
     strapi.db.migrations.providers.internal.register(discardDocumentDrafts);
+
+    // Register audit controller
+    strapi.get('controllers').set('core-api.audit', createAuditController);
   },
 });

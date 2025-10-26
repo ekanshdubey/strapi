@@ -22,6 +22,7 @@ export default (strapi: Core.Strapi) => {
   registerAdminRoutes(strapi);
   registerAPIRoutes(strapi);
   registerPluginRoutes(strapi);
+  registerAuditRoutes(strapi);
 };
 
 /**
@@ -110,6 +111,34 @@ const registerAPIRoutes = (strapi: Core.Strapi) => {
       return strapi.server.routes(router);
     });
   }
+};
+
+/**
+ * Register audit routes
+ */
+const registerAuditRoutes = (strapi: Core.Strapi) => {
+  const { 'core-api': coreAPI } = strapi.services;
+
+  const auditRouter: Core.Router = {
+    type: 'content-api',
+    prefix: '/api',
+    routes: [
+      {
+        method: 'GET',
+        path: '/audit-logs',
+        handler: 'core-api.audit.find',
+        config: {
+          auth: {
+            scope: ['read_audit_logs'],
+          },
+          policies: ['api::content-api.hasPermissions'],
+          middlewares: [],
+        },
+      },
+    ],
+  };
+
+  strapi.server.routes(auditRouter);
 };
 
 const instantiateRouterInputs = (
